@@ -19,7 +19,7 @@ En møteassistent med persisk 1001 natt-design, bygget med React og Vite.
 - AI-drevne forslag via Anthropic API (aksjonspunkter og nøkkelpunkter)
 - Generer møtereferat med ett klikk
 
-## Kom i gang
+## Kjør lokalt
 
 ```bash
 npm install
@@ -28,44 +28,56 @@ npm run dev
 
 Åpne [http://localhost:5173](http://localhost:5173)
 
-## Deploy
+## Sett opp AI-funksjonene
 
-```bash
-npm run build
+AI-knappene i Iznogoud (foreslå aksjonspunkter, lag nøkkelpunkter) trenger
+en Anthropic API-nøkkel for å fungere. Slik setter du det opp:
+
+### Steg 1: Skaff API-nøkkel
+
+1. Gå til [console.anthropic.com](https://console.anthropic.com)
+2. Opprett konto hvis du ikke har en
+3. Gå til **API Keys** og klikk **Create Key**
+4. Kopier nøkkelen (den starter med `sk-ant-...`)
+
+### Steg 2: Legg nøkkelen inn i Vercel
+
+1. Gå til [vercel.com](https://vercel.com) og åpne Iznogoud-prosjektet
+2. Klikk **Settings** i toppmenyen
+3. Klikk **Environment Variables** i sidemenyen
+4. Fyll inn:
+   - **Key:** `ANTHROPIC_API_KEY`
+   - **Value:** Lim inn nøkkelen fra steg 1
+5. Klikk **Save**
+
+### Steg 3: Deploy på nytt
+
+1. Push endringene til GitHub (inkludert den nye `api/chat.js`-filen)
+2. Vercel deployer automatisk
+3. AI-knappene i Iznogoud skal nå fungere!
+
+## Prosjektstruktur
+
 ```
-
-Mappen `dist/` kan deployes til Vercel, Netlify, GitHub Pages eller lignende.
-
-### Vercel (enklest)
-
-1. Push til GitHub
-2. Koble repoet til [vercel.com](https://vercel.com)
-3. Vercel oppdager Vite automatisk — klikk Deploy
-
-### Netlify
-
-1. Push til GitHub
-2. Koble repoet til [netlify.com](https://netlify.com)
-3. Build command: `npm run build`
-4. Publish directory: `dist`
-
-### GitHub Pages
-
-1. Installer: `npm install -D gh-pages`
-2. Legg til i `package.json` scripts: `"deploy": "gh-pages -d dist"`
-3. Kjør: `npm run build && npm run deploy`
-
-## AI-funksjonalitet
-
-Iznogoud bruker Anthropic API for å foreslå aksjonspunkter og nøkkelpunkter.
-API-kall gjøres direkte fra klienten. For produksjonsbruk anbefales det å
-sette opp en enkel proxy-backend som legger til API-nøkkelen server-side.
+iznogoud/
+├── api/
+│   └── chat.js          ← Serverless proxy (legger til API-nøkkel)
+├── public/
+│   └── iznogoud-logo.png
+├── src/
+│   ├── main.jsx
+│   └── IznogoudApp.jsx  ← Hele appen
+├── index.html
+├── package.json
+└── vite.config.js
+```
 
 ## Teknologi
 
 - React 18
 - Vite 6
-- Ren CSS-in-JS (ingen eksterne UI-biblioteker)
+- Vercel Serverless Functions
+- Anthropic Claude API
 - Fonter: Cormorant Garamond + Amiri (Google Fonts)
 
 ## Lisens
